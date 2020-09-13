@@ -10,7 +10,7 @@ function CartScreen(props) {
 
   const removeFromCartHandler = (productId) => {
     dispatch(removeFromCart(productId));
-  }
+  };
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
@@ -22,8 +22,8 @@ function CartScreen(props) {
   }, []);
 
   const checkoutHandler = () => {
-    props.history.push("/signin?redirect=shipping");
-  }
+    props.history.push('/signin?redirect=shipping');
+  };
 
   return (
     <div className="cart">
@@ -36,8 +36,8 @@ function CartScreen(props) {
           {cartItems.length === 0 ? (
             <div>Cart is empty</div>
           ) : (
-            cartItems.map((item) => (
-              <li>
+            cartItems.map((item, index) => (
+              <li key={index}>
                 <div className="cart-image">
                   <img src={item.image} alt="product" />
                 </div>
@@ -45,9 +45,10 @@ function CartScreen(props) {
                   <div>
                     <Link to={'/product/' + item.product}>{item.name}</Link>
                   </div>
-                  <div >
+                  <div>
                     Qty:
-                    <select className="select"
+                    <select
+                      className="select"
                       value={item.qty}
                       onChange={(e) => dispatch(addToCart(item.product, e.target.value))}>
                       {[...Array(item.countInStock).keys()].map((x) => (

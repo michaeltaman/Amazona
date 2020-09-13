@@ -23,4 +23,10 @@ Demo : https://amazonaapp.herokuapp.com/
     - use config.MONGODB_URL
     - npm install mongoose
     - mongoose.connect(url, {newParser: true}).catch(err => console.log(err.reason))
+
+15-Signin-Users
+  - userRoute post findOne {_id, ... , token: getToken(user)}
+  - util getToken jwt.sign({user}, config.JWT_SECRET, {expiresIn:'48h'})
+  - isAuth token = req.headers.authorization token.slice(7, token.length)
+  - jwt.verify(token, config.JWT, (err, decode)=> { req.user = decode; next()})
    
