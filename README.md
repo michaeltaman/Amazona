@@ -29,4 +29,10 @@ Demo : https://amazonaapp.herokuapp.com/
   - util getToken jwt.sign({user}, config.JWT_SECRET, {expiresIn:'48h'})
   - isAuth token = req.headers.authorization token.slice(7, token.length)
   - jwt.verify(token, config.JWT, (err, decode)=> { req.user = decode; next()})
+
+16 -Manage-Products-Screen
+  1. isAuth token = req.headers.authorization token.slice(7, token.length)
+  2. Create ProductsScreen.js and add to Add Route to App.js
+  3. product list 
+  4.  Define State for id, name, brand, category, image, price, countInStock, description
    
