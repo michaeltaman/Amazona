@@ -1,36 +1,40 @@
 import React, { useEffect } from 'react';
-import { addToCart, removeFromCart } from '../actions/cartActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CheckoutSteps from '../components/CheckoutSteps';
-
+import { createOrder } from '../actions/orderActions';
 function PlaceOrderScreen(props) {
-  const productId = props.match.params.id;
-  const qty = props.location.search ? Number(props.location.search.split('=')[1]) : 1;
-  const dispatch = useDispatch();
 
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector(state => state.cart);
+  const orderCreate = useSelector(state => state.orderCreate);
+  const { loading, success, error, order } = orderCreate;
+
   const { cartItems, shipping, payment } = cart;
-
-  if(!shipping.address) {
+  if (!shipping.address) {
     props.history.push("/shipping");
-  }else if(!payment.paymentMethod) {
-    props.location.push("/payment");
+  } else if (!payment.paymentMethod) {
+    props.history.push("/payment");
   }
-
-  const itemsPrice = cartItems.reduce((a,c) =>  a + c.price * c.qty, 0)
-  const shippingPrice = itemsPrice > 100 ? 0: 10; 
+  const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
+  const shippingPrice = itemsPrice > 100 ? 0 : 10;
   const taxPrice = 0.15 * itemsPrice;
   const totalPrice = itemsPrice + shippingPrice + taxPrice;
+  const dispatch = useDispatch();
 
   const placeOrderHandler = () => {
     // create an order
-
+    dispatch(createOrder({
+      orderItems: cartItems, shipping, payment, itemsPrice, shippingPrice,
+      taxPrice, totalPrice
+    }));
   }
 
   useEffect(() => {
-    
-  }, []);
+    if(success){
+      props.history.push("/order/" + order._id)
+    }
+
+  }, [success]);
 
   const checkoutHandler = () => {
     props.history.push('/signin?redirect=shipping');
@@ -46,8 +50,8 @@ function PlaceOrderScreen(props) {
             <h3>Shipping</h3>
           </div>
           <div>
-            {cart.shipping.address}, {cart.shipping.city},
-          {cart.shipping.postalCode}, {cart.shipping.country}
+            {cart.shipping.address}, {cart.shipping.city},{cart.shipping.postalCode},{' '}
+            {cart.shipping.country}
           </div>
           <div>
             <h3>Payment</h3>
@@ -71,9 +75,7 @@ function PlaceOrderScreen(props) {
                       <div>
                         <Link to={'/product/' + item.product}>{item.name}</Link>
                       </div>
-                      <div>
-                        Qty: {item.qty}
-                      </div>
+                      <div>Qty: {item.qty}</div>
                     </div>
                     <div className="cart-price">${item.price}</div>
                   </li>
@@ -85,7 +87,9 @@ function PlaceOrderScreen(props) {
         <div className="placeorder-action">
           <ul>
             <li>
-              <button className="button primary full-width" onClick={placeOrderHandler}>Place Order</button>
+              <button className="button primary full-width" onClick={placeOrderHandler}>
+                Place Order
+              </button>
             </li>
             <li>
               <h3>Order Summary</h3>
@@ -109,12 +113,9 @@ function PlaceOrderScreen(props) {
               <div>Order Total</div>
               <div>${totalPrice}</div>
             </li>
-
           </ul>
-        
-          <button
-            onClick={checkoutHandler}
-            disabled={cartItems.length === 0}>
+
+          <button onClick={checkoutHandler} disabled={cartItems.length === 0}>
             Proceed to Checkout
           </button>
         </div>

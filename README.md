@@ -24,15 +24,17 @@ Demo : https://amazonaapp.herokuapp.com/
     - npm install mongoose
     - mongoose.connect(url, {newParser: true}).catch(err => console.log(err.reason))
 
-15-Signin-Users
+- 15-Signin-Users
   - userRoute post findOne {_id, ... , token: getToken(user)}
   - util getToken jwt.sign({user}, config.JWT_SECRET, {expiresIn:'48h'})
   - isAuth token = req.headers.authorization token.slice(7, token.length)
   - jwt.verify(token, config.JWT, (err, decode)=> { req.user = decode; next()})
 
-16 -Manage-Products-Screen
+- 16-Manage-Products-Screen
   1. isAuth token = req.headers.authorization token.slice(7, token.length)
   2. Create ProductsScreen.js and add to Add Route to App.js
   3. product list 
   4.  Define State for id, name, brand, category, image, price, countInStock, description
-   
+
+- 17-Checkout-Wizard-Screen
+- 18-Create-Order  
