@@ -1,15 +1,20 @@
 import express from 'express';
 import Order from '../models/orderModel';
-import { isAuth } from '../util';
+import { isAdmin, isAuth } from '../util';
 
 const router = express.Router();
+
+router.get('/', isAuth, async (req, res) => {
+  const orders = await Order.find({}).populate('user');
+  if (orders) {
+    res.send(orders);
+  }
+});
 
 router.get('/mine', isAuth, async (req, res) => {
   const orders = await Order.find({ user: req.user._id });
   if (orders) {
     res.send(orders);
-  } else {
-    res.status(404).send('Orders Not Found.');
   }
 });
 
@@ -19,6 +24,17 @@ router.get('/:id', isAuth, async (req, res) => {
     res.send(order);
   } else {
     res.status(404).send('Order Not Found.');
+  }
+});
+
+
+router.delete("/:id", isAuth, isAdmin, async (req, res) => {
+  const order = await Order.findOne({ _id: req.params.id });
+  if (order) {
+    const deletedOrder = await order.remove();
+    res.send(deletedOrder);
+  } else {
+    res.status(404).send("Order Not Found.")
   }
 });
 
