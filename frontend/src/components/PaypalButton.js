@@ -53,4 +53,15 @@ function PaypalButton(props) {
     onApprove={(data, actions) => onApprove(data, actions)} />
 }
 
-export default PaypalButton; 
+export default PaypalButton;
+
+// BEFORE ALL ,see https://developer.paypal.com/docs/business/checkout/set-up-standard-payments/
+// 
+
+// ##1. Oficial. See also https://www.npmjs.com/package/react-paypal-button-v2#large_blue_diamond-usage-example ----> react-paypal-button-v2
+
+// ##2. Indian !!!(works) See also https://www.youtube.com/watch?v=f5Gpnqj-x-c - must create business account paypal Sanbox (!!!) Test account
+
+// ##3. !!! See also:
+  //https://github.com/fireship-io/193-paypal-checkout-v2-demos/blob/master/react-app/src/App.js 
+  //https://www.youtube.com/watch?v=AtZGoueL4Vs&feature=youtu.be 
